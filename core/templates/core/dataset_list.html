@@ -5,6 +5,12 @@
     <title>List</title>
 </head>
 <body>
+    <h1>Last dataset failure: {{ status }}</h1>
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit"/>
+    </form>
+    <hr/>
     <table>
         <thead>
             <tr>
