@@ -82,3 +82,4 @@ ENV/
 .spyderproject
 .ropeproject
 .idea/
+local_settings.py

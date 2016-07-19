@@ -4,7 +4,7 @@ from kombu import Queue, Exchange
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'pt4&_+-01l)v+kk)x+b-w08=#2b+-6g9-*uiyalz#hu*1t(%xv'
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
@@ -79,3 +79,8 @@ CELERY_QUEUES = (
 CELERY_DEFAULT_QUEUE = 'get'
 CELERY_DEFAULT_EXCHANGE = 'default'
 CELERY_DEFAULT_ROUTING_KEY = 'get'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
