@@ -13,7 +13,7 @@ def get(self, instance):
 def process(self, instance):
     try:
         d = json.loads(instance.input)
-        result = {'result': d['a'] + d['b']}
+        result = {'result': sum(chunk['a'] + chunk['b'] for chunk in d)}
         instance.result = result
         return result
     except Exception as e:

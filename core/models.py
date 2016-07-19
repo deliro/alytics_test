@@ -8,12 +8,13 @@ class DataSet(models.Model):
     exception = models.CharField(max_length=200, null=True)
 
     @property
-    def done(self):
-        return bool(self.result or self.exception)
-
-    @property
-    def no_errors(self):
-        return not self.exception
+    def status(self):
+        if not (self.result or self.exception):
+            return 'PENDING'
+        elif not self.exception:
+            return 'SUCCESS'
+        else:
+            return 'FAILURE'
 
     @classmethod
     def get_last_status(cls):

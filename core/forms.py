@@ -1,4 +1,5 @@
 import json
+from collections.abc import Mapping, Sequence
 
 from django import forms
 
@@ -10,15 +11,14 @@ class DataSetForm(forms.Form):
 
     def clean_file(self):
         try:
-            return json.loads(self.cleaned_data['file'].read().decode())
+            data = json.loads(self.cleaned_data['file'].read().decode())
+            if not isinstance(data, Sequence):
+                raise forms.ValidationError('JSON file must contain list in the root')
+            if not all(isinstance(chunk, Mapping) for chunk in data):
+                raise forms.ValidationError('JSON file must contain list of dicts')
+            return data
         except (ValueError, TypeError):
             raise forms.ValidationError('Invalid JSON file')
 
     def save(self):
-        data = self.cleaned_data['file']
-        if not isinstance(data, list):
-            data = [data]
-        # we can't bulk_create here because of
-        # post_save signal won't work
-        for data_set in data:
-            DataSet.objects.create(input=json.dumps(data_set))
+        return DataSet.objects.create(input=json.dumps(self.cleaned_data['file']))
